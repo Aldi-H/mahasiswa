@@ -3,8 +3,11 @@ import { useState } from "react";
 import {
   Avatar,
   Box,
+  Button,
   Flex,
+  Heading,
   HStack,
+  Link,
   Menu,
   MenuButton,
   MenuDivider,
@@ -12,44 +15,48 @@ import {
   MenuList,
   Stack,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 
 const Navbar = () => {
   const [login, setLogin] = useState(false);
 
-  const handleLogin = () => {
-    setLogin(!login);
-  };
-
   return (
-    <>
-      <Box px={10} py={5}>
-        <Flex h={16} alignItems="center" justifyContent="space-between">
-          <Box>Mahasiswa (Easy)</Box>
+    <Box px={10}>
+      <Flex my={5} h={16} alignItems="center" justifyContent="space-between">
+        <Heading as="h2" size="md">
+          Mahasiswa
+        </Heading>
 
-          <Flex alignItems="center">
-            <HStack spacing="3">
-              <Text>Username</Text>
-              <Menu>
-                <MenuButton minW={0} rounded="full">
-                  <Avatar size="sm" />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem
-                    onClick={() => {
-                      alert("log out");
-                    }}
-                  >
-                    Logout
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </HStack>
-          </Flex>
+        <Stack spacing={8} alignItems="center">
+          <Heading as="h3" size="lg">
+            Easy
+          </Heading>
+        </Stack>
+
+        <Flex alignItems="center">
+          <HStack spacing="3">
+            {/* <Text fontSize="lg">Username</Text>
+            <Menu>
+              <MenuButton minW={0} rounded="full">
+                <Avatar size="sm" />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={() => {
+                    alert("log out");
+                  }}
+                >
+                  Logout
+                </MenuItem>
+              </MenuList>
+            </Menu> */}
+            <Link href="./login">
+              <Button>Login</Button>
+            </Link>
+          </HStack>
         </Flex>
-      </Box>
-    </>
+      </Flex>
+    </Box>
   );
 };
 
