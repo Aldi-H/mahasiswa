@@ -12,9 +12,14 @@ import {
   InputRightElement,
   Stack,
   VStack,
+  useColorModeValue,
+  FormLabel,
+  Text,
+  Link,
+  Icon,
 } from "@chakra-ui/react";
 
-import { EmailIcon, LockIcon } from "@chakra-ui/icons";
+import { BiIdCard, BiLockAlt, BiShow, BiHide } from "react-icons/bi";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,51 +36,87 @@ const Login = () => {
 
   return (
     <Flex
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-      width="100wh"
+      justify="center"
+      align="center"
+      minH="100vh"
+      bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <VStack justifyContent="center" alignItems="center" mb="4">
-        <Heading>Log in to your account</Heading>
-        <form onSubmit={handleSubmit}>
-          <Box>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Heading fontSize="4xl">Sign in to your account</Heading>
+
+        <Box
+          rounded="lg"
+          bg={useColorModeValue("white", "gray.700")}
+          p={8}
+          boxShadow="lg"
+        >
+          <form onSubmit={handleSubmit}>
             <Stack spacing={4}>
               <FormControl>
                 <InputGroup>
-                  <InputLeftElement children={<EmailIcon color="gray.300" />} />
+                  <InputLeftElement
+                    children={
+                      <Icon as={BiIdCard} w="6" h="6" color="gray.300" />
+                    }
+                  />
                   <Input
                     type="text"
                     placeholder="NIM"
                     value={nim}
                     onChange={(e) => setNim(e.target.value)}
-                  ></Input>
+                  />
                 </InputGroup>
               </FormControl>
               <FormControl>
                 <InputGroup>
-                  <InputLeftElement children={<LockIcon color="gray.300" />} />
+                  <InputLeftElement
+                    children={
+                      <Icon as={BiLockAlt} w="6" h="6" color="gray.300" />
+                    }
+                  />
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <InputRightElement width="4.5rem">
-                    <Button size="sm" h="1.75rem" onClick={handleShowPassword}>
-                      {showPassword ? "hide" : "show"}
+                  <InputRightElement h="full">
+                    <Button variant="ghost" onClick={handleShowPassword}>
+                      {showPassword ? (
+                        <Icon as={BiShow} />
+                      ) : (
+                        <Icon as={BiHide} />
+                      )}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-              <Button type="submit" value="submit">
-                Login
-              </Button>
+              <Stack spacing={10} pt={2}>
+                <Button
+                  type="submit"
+                  value="submit"
+                  size="lg"
+                  bg={"blue.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                >
+                  Sign in
+                </Button>
+              </Stack>
+              <Stack pt={6}>
+                <Text align="center">
+                  Don't have an account?{" "}
+                  <Link color="blue.400" href="./register">
+                    register
+                  </Link>
+                </Text>
+              </Stack>
             </Stack>
-          </Box>
-        </form>
-      </VStack>
+          </form>
+        </Box>
+      </Stack>
     </Flex>
   );
 };
