@@ -20,18 +20,34 @@ import {
 } from "@chakra-ui/react";
 
 import { BiIdCard, BiLockAlt, BiShow, BiHide } from "react-icons/bi";
+import { useRouter } from "next/router";
+import backend from "../api/backend";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [nim, setNim] = useState("");
   const [password, setPassword] = useState("");
+  const [validation, setValidation] = useState([]);
+
+  const router = useRouter();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
-  const handleSubmit = (e) => {
+  const loginhandler = async (e) => {
     e.preventDefault();
-    console.log("nim: ", nim);
-    console.log("password: ", password);
+
+    await backend
+      .post("/auth/login", {
+        nim,
+        password,
+      })
+      .then((res) => {
+        localStorage.setItem("token", res.data.data.token);
+        router.push("/");
+      })
+      .catch((err) => {
+        setValidation(err.response.data.message);
+      });
   };
 
   return (
@@ -50,7 +66,7 @@ const Login = () => {
           p={8}
           boxShadow="lg"
         >
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={loginhandler}>
             <Stack spacing={4}>
               <FormControl>
                 <InputGroup>
@@ -101,6 +117,7 @@ const Login = () => {
                   _hover={{
                     bg: "blue.500",
                   }}
+                  // onClick={() => router.push("/")}
                 >
                   Sign in
                 </Button>

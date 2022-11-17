@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Avatar,
@@ -18,7 +18,37 @@ import {
 } from "@chakra-ui/react";
 
 const Navbar = () => {
-  const [login, setLogin] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
+
+  const handleName = () => {
+    const decoded = Buffer.from(
+      localStorage.getItem("token").split(".")[1],
+      "base64",
+    ).toString();
+
+    const nim = JSON.parse(decoded).nim;
+    return setUser(nim);
+    // console.log(nim);
+  };
+
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    setIsLogin(false);
+  };
+
+  const loginHandler = () => {
+    if (!localStorage.getItem("token")) {
+      setIsLogin(false);
+    }
+
+    return setIsLogin(true);
+  };
+
+  useEffect(() => {
+    loginHandler();
+    handleName();
+  }, []);
 
   return (
     <Box px={10}>
@@ -35,24 +65,23 @@ const Navbar = () => {
 
         <Flex alignItems="center">
           <HStack spacing="3">
-            {/* <Text fontSize="lg">Username</Text>
-            <Menu>
-              <MenuButton minW={0} rounded="full">
-                <Avatar size="sm" />
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={() => {
-                    alert("log out");
-                  }}
-                >
-                  Logout
-                </MenuItem>
-              </MenuList>
-            </Menu> */}
-            <Link href="./login">
-              <Button>Login</Button>
-            </Link>
+            {isLogin ? (
+              <>
+                <Text fontSize="lg">{user}</Text>
+                <Menu>
+                  <MenuButton minW={0} rounded="full">
+                    <Avatar size="sm" />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                  </MenuList>
+                </Menu>
+              </>
+            ) : (
+              <Link href="./login">
+                <Button>Login</Button>
+              </Link>
+            )}
           </HStack>
         </Flex>
       </Flex>

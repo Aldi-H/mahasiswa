@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Flex,
@@ -20,7 +20,8 @@ import {
 
 import { BiIdCard, BiLockAlt, BiShow, BiHide, BiUser } from "react-icons/bi";
 
-import { MdArrowDropDown, MdMailOutline } from "react-icons/md";
+import { MdArrowDropDown } from "react-icons/md";
+import backend from "../api/backend";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,12 +32,28 @@ const Register = () => {
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
+  const registerUser = async (values) => {
+    try {
+      const res = await backend.post("/auth/register", values, {
+        validateStatus: false,
+      });
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("nim: ", nim);
-    console.log("nama: ", nama);
-    console.log("angkatan: ", angkatan);
-    console.log("password: ", password);
+    const values = {
+      nim,
+      nama,
+      angkatan,
+      password,
+    };
+
+    registerUser(values);
   };
 
   return (
