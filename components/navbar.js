@@ -6,11 +6,9 @@ import {
   Button,
   Flex,
   Heading,
-  HStack,
   Link,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
   Stack,
@@ -32,9 +30,6 @@ const Navbar = () => {
   };
 
   const logoutHandler = () => {
-    // localStorage.removeItem("user");
-    // setIsLogin(false);
-
     setUser({});
     localStorage.clear();
     setIsLogin(false);
@@ -45,7 +40,6 @@ const Navbar = () => {
       setIsLogin(false);
     }
 
-    // console.log("login");
     return setIsLogin(true);
   };
 

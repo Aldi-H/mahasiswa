@@ -39,43 +39,25 @@ export default function Home() {
     }
   }
 
-  // const hasUserLogedIn = () => {
-  //   const loggedInUser = localStorage.getItem("user");
+  const handleDelete = async (nim) => {
+    try {
+      const res = await backend.delete(`/mahasiswa/${nim}`, {
+        headers: {
+          token: localStorage.getItem("user"),
+          validateStatus: false,
+        },
+      });
 
-  //   if (loggedInUser) {
-  //     const foundUser = loggedInUser;
-  //     setUser(foundUser);
-  //     // console.log("user logged in");
-  //   }
-  // };
-
-  // const handleDelete = async (nim) => {
-  //   const token = localStorage.getItem("user");
-  //   const decoded = Buffer.from(token.split(".")[1], "base64").toString();
-  //   const nimToken = JSON.parse(decoded).nim;
-
-  //   if (nimToken !== mahasiswas.nim) {
-  //     console.log("not authorized");
-  //     return;
-  //   }
-  //   try {
-  //     const res = await backend.delete(`/mahasiswa/${nim}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     const data = res.data;
-  //     console.log(data);
-  //     getAllMahasiswa();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      const data = res.data;
+      console.log(data);
+      getAllMahasiswa();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     getAllMahasiswa();
-    // hasUserLogedIn();
   }, []);
 
   return (
@@ -115,7 +97,9 @@ export default function Home() {
                     <Td>{mahasiswa.nama}</Td>
                     <Td>{mahasiswa.angkatan}</Td>
                     <Td>
-                      <Button>Delete</Button>
+                      <Button onClick={() => handleDelete(mahasiswa.nim)}>
+                        Delete
+                      </Button>
                     </Td>
                   </Tr>
                 ))}
