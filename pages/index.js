@@ -39,6 +39,15 @@ export default function Home() {
     }
   }
 
+  const hasUserLogedIn = () => {
+    const loggedInUser = localStorage.getItem("user");
+
+    if (loggedInUser) {
+      const foundUser = loggedInUser;
+      setUser(foundUser);
+    }
+  };
+
   const handleDelete = async (nim) => {
     try {
       const res = await backend.delete(`/mahasiswa/${nim}`, {
@@ -58,6 +67,7 @@ export default function Home() {
 
   useEffect(() => {
     getAllMahasiswa();
+    hasUserLogedIn();
   }, []);
 
   return (

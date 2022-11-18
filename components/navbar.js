@@ -20,6 +20,8 @@ const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   const handleName = () => {
+    if (!localStorage.getItem("user")) return setUser(null);
+
     const decoded = Buffer.from(
       localStorage.getItem("user").split(".")[1],
       "base64",
@@ -30,14 +32,14 @@ const Navbar = () => {
   };
 
   const logoutHandler = () => {
-    setUser({});
+    setUser(null);
     localStorage.clear();
     setIsLogin(false);
   };
 
   const loginHandler = () => {
     if (!localStorage.getItem("user")) {
-      setIsLogin(false);
+      return setIsLogin(false);
     }
 
     return setIsLogin(true);

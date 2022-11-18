@@ -34,26 +34,8 @@ const Login = () => {
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
-  // const loginhandler = async (e) => {
-  //   e.preventDefault();
-
-  //   await backend
-  //     .post("/auth/login", {
-  //       nim,
-  //       password,
-  //     })
-  //     .then((res) => {
-  //       localStorage.setItem("token", res.data.token);
-  //       router.push("/");
-  //     })
-  //     .catch((err) => {
-  //       setValidation(err.response.data.message);
-  //     });
-  // };
-
   const loginHandler = async (e) => {
     e.preventDefault();
-
     const user = {
       nim,
       password,
@@ -64,8 +46,17 @@ const Login = () => {
         validateStatus: false,
       });
 
-      setUser(res.data.token);
+      if (nim === "" || password === "") {
+        alert("NIM dan Password tidak boleh kosong");
+        return;
+      }
 
+      if (res.status !== 200) {
+        alert(res.data.message);
+        return;
+      }
+
+      setUser(res.data.token);
       localStorage.setItem("user", res.data.token);
 
       router.push("/");
@@ -141,7 +132,9 @@ const Login = () => {
                   _hover={{
                     bg: "blue.500",
                   }}
-                  // onClick={() => router.push("/")}
+                  onClick={() => {
+                    router.push("/");
+                  }}
                 >
                   Sign in
                 </Button>
