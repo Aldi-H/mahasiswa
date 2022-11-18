@@ -22,6 +22,7 @@ import { BiIdCard, BiLockAlt, BiShow, BiHide, BiUser } from "react-icons/bi";
 
 import { MdArrowDropDown } from "react-icons/md";
 import backend from "../api/backend";
+import { useRouter } from "next/router";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +30,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [nama, setNama] = useState("");
   const [angkatan, setAngkatan] = useState("");
+
+  const router = useRouter();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -54,6 +57,7 @@ const Register = () => {
     };
 
     registerUser(values);
+    router.push("/login");
   };
 
   return (

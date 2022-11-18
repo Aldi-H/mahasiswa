@@ -27,27 +27,53 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [nim, setNim] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState();
   const [validation, setValidation] = useState([]);
 
   const router = useRouter();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
-  const loginhandler = async (e) => {
+  // const loginhandler = async (e) => {
+  //   e.preventDefault();
+
+  //   await backend
+  //     .post("/auth/login", {
+  //       nim,
+  //       password,
+  //     })
+  //     .then((res) => {
+  //       localStorage.setItem("token", res.data.token);
+  //       router.push("/");
+  //     })
+  //     .catch((err) => {
+  //       setValidation(err.response.data.message);
+  //     });
+  // };
+
+  const loginHandler = async (e) => {
     e.preventDefault();
 
-    await backend
-      .post("/auth/login", {
-        nim,
-        password,
-      })
-      .then((res) => {
-        localStorage.setItem("token", res.data.data.token);
-        router.push("/");
-      })
-      .catch((err) => {
-        setValidation(err.response.data.message);
+    const user = {
+      nim,
+      password,
+    };
+
+    try {
+      const res = await backend.post("auth/login", user, {
+        validateStatus: false,
       });
+
+      setUser(res.data.token);
+
+      // localStorage.setItem('token', res.data.token);
+      localStorage.setItem("user", res.data.token);
+      // console.log(res.data.token);
+
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -66,7 +92,7 @@ const Login = () => {
           p={8}
           boxShadow="lg"
         >
-          <form onSubmit={loginhandler}>
+          <form onSubmit={loginHandler}>
             <Stack spacing={4}>
               <FormControl>
                 <InputGroup>
