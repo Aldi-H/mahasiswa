@@ -74,8 +74,9 @@ export default function Home() {
       console.log(data);
       getAllMahasiswa();
       handleLogout();
+      alert('mahasiswa deleted');
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     }
   };
 
