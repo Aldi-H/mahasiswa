@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import {
   Avatar,
   Box,
@@ -15,41 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const Navbar = () => {
-  const [user, setUser] = useState(null);
-  const [isLogin, setIsLogin] = useState(false);
-
-  const handleName = () => {
-    if (!localStorage.getItem("user")) return setUser(null);
-
-    const decoded = Buffer.from(
-      localStorage.getItem("user").split(".")[1],
-      "base64",
-    ).toString();
-
-    const nim = JSON.parse(decoded).nim;
-    return setUser(nim);
-  };
-
-  const logoutHandler = () => {
-    setUser(null);
-    localStorage.clear();
-    setIsLogin(false);
-  };
-
-  const loginHandler = () => {
-    if (!localStorage.getItem("user")) {
-      return setIsLogin(false);
-    }
-
-    return setIsLogin(true);
-  };
-
-  useEffect(() => {
-    loginHandler();
-    handleName();
-  }, []);
-
+const Navbar = ({ user, handleLogout }) => {
   return (
     <Box px={10}>
       <Flex my={5} h={16} alignItems="center" justifyContent="space-between">
@@ -64,15 +28,15 @@ const Navbar = () => {
         </Stack>
 
         <Flex alignItems="center" gridColumnGap={4}>
-          {isLogin ? (
+          {user ? (
             <>
-              <Text fontSize="lg">{user}</Text>
+              <Text fontSize="lg">{user.nama}</Text>
               <Menu m={0}>
                 <MenuButton minW={0} rounded="full">
                   <Avatar size="sm" />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </MenuList>
               </Menu>
             </>

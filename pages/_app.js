@@ -1,12 +1,18 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import { useState } from "react";
 import customTheme from "../styles/themes";
+import { AuthContext } from "../utils/AuthContext";
 // import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
+  const [token, setToken] = useState(null);
+
   return (
-    <ChakraProvider theme={customTheme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <AuthContext.Provider value={{token, setToken}}>
+      <ChakraProvider theme={customTheme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </AuthContext.Provider>
   );
 }
 
