@@ -28,8 +28,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [nim, setNim] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState();
-  const [validation, setValidation] = useState([]);
   const { setToken } = useContext(AuthContext)
 
   const router = useRouter();
@@ -58,7 +56,6 @@ const Login = () => {
         return;
       }
 
-      setUser(res.data.token);
       setToken(res.data.token);
 
       router.push("/");
