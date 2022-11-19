@@ -1,6 +1,5 @@
 import {
   Box,
-  Container,
   Table,
   TableContainer,
   Thead,
@@ -12,20 +11,16 @@ import {
   Tr,
 } from "@chakra-ui/react";
 
-import { useEffect, useState } from "react";
-
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import { useContext, useEffect, useState } from "react";
 
 import backend from "../api/backend";
-import { getAllMahasiswa } from "../api/backend";
-import axios from "axios";
 import Navbar from "../components/navbar";
+import { AuthContext } from "../utils/AuthContext";
 
 export default function Home() {
   const [mahasiswas, setMahasiswas] = useState([]);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
+  const { token, setToken } = useContext(AuthContext);
 
   async function getAllMahasiswa() {
     try {
@@ -39,20 +34,36 @@ export default function Home() {
     }
   }
 
-  const hasUserLogedIn = () => {
-    const loggedInUser = localStorage.getItem("user");
+  const hasUserLogedIn = async () => {
+    try {
+      const res = await backend.get('/mahasiswa/profile', {
+        headers: {
+          token,
+          validateStatus: false,
+        },
+      })
 
-    if (loggedInUser) {
-      const foundUser = loggedInUser;
-      setUser(foundUser);
+      if (res.status !== 200) {
+        alert(res.data.message);
+        return;
+      }
+
+      return setUser(res.data.mahasiswa);
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  const handleLogout = () => {
+    setToken(null);
+    setUser(null);
+  }
 
   const handleDelete = async (nim) => {
     try {
       const res = await backend.delete(`/mahasiswa/${nim}`, {
         headers: {
-          token: localStorage.getItem("user"),
+          token,
           validateStatus: false,
         },
       });
@@ -60,27 +71,29 @@ export default function Home() {
       const data = res.data;
       console.log(data);
       getAllMahasiswa();
+      handleLogout();
+      alert('mahasiswa deleted');
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     }
   };
 
   useEffect(() => {
-    getAllMahasiswa();
     hasUserLogedIn();
-  }, []);
+    getAllMahasiswa();
+  }, [token]);
 
   return (
     <Box
       justify="center"
       align="center"
       minH="100vh"
-      bg={useColorModeValue("gray.50", "gray.800")}
+      bg={useColorModeValue("`gray.50", "gray.800")}
       pt={5}
       pb={10}
       px={10}
     >
-      <Navbar />
+      <Navbar user={user} handleLogout={handleLogout} />
       <Box
         rounded="lg"
         bg={useColorModeValue("white", "gray.700")}

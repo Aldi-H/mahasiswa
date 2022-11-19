@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import {
   Box,
@@ -22,13 +22,13 @@ import {
 import { BiIdCard, BiLockAlt, BiShow, BiHide } from "react-icons/bi";
 import { useRouter } from "next/router";
 import backend from "../api/backend";
+import { AuthContext } from "../utils/AuthContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [nim, setNim] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState();
-  const [validation, setValidation] = useState([]);
+  const { setToken } = useContext(AuthContext)
 
   const router = useRouter();
 
@@ -56,8 +56,7 @@ const Login = () => {
         return;
       }
 
-      setUser(res.data.token);
-      localStorage.setItem("user", res.data.token);
+      setToken(res.data.token);
 
       router.push("/");
     } catch (error) {
